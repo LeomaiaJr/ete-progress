@@ -1,0 +1,7 @@
+.env
+
+out/
+node_modules/
+
+.idea/
+*.iml

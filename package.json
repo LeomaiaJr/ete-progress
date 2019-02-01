@@ -1,0 +1,32 @@
+{
+  "name": "ete-progress",
+  "version": "1.0.0",
+  "description": "A Twitter bot that periodically tweets a progression of ETE FMC's school year.",
+  "main": "out/main.js",
+  "scripts": {
+    "start": "npm run build-ts && node -r dotenv/config out/main.js",
+    "build-ts": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rodrigoaddor/ete-progress.git"
+  },
+  "author": {
+    "name": "Rodrigo Addor",
+    "email": "rodrigotladdor@gmail.com"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rodrigoaddor/ete-progress/issues"
+  },
+  "homepage": "https://github.com/rodrigoaddor/ete-progress#readme",
+  "devDependencies": {
+    "@types/node": "^10.12.21",
+    "@types/twitter": "^1.7.0",
+    "typescript": "^3.3.1"
+  },
+  "dependencies": {
+    "dotenv": "^6.2.0",
+    "twitter": "^1.7.1"
+  }
+}
