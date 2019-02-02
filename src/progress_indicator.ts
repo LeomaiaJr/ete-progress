@@ -4,8 +4,8 @@ interface ProgressIndicatorOptions {
 	emptyChar?: string
 }
 
-export default function CreateProgressIndicator(percent: number, options: ProgressIndicatorOptions): string {
-	const length = options.length || 10
+export default function createProgressIndicator(percent: number, options: ProgressIndicatorOptions = {}): string {
+	const length = options.length || 16
 	const filledChar = options.filledChar || '█'
 	const emptyChar = options.emptyChar || '░'
 	const filledLength = Math.floor(percent * length)
