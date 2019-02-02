@@ -1,6 +1,9 @@
-import {Day, Days} from './calendar'
+import {Day, Days} from '../calendar'
 
-export const whitelist: Array<Day|Days> = [
+export const startDay = new Day(2, 4)
+export const endDay = new Day(11, 29)
+
+export const whitelist: Array<Day | Days> = [
 	[2, 9],
 	[2, 23],
 	[3, 23],
@@ -18,7 +21,7 @@ export const whitelist: Array<Day|Days> = [
 	[11, 9],
 ].map(e => e.length === 2 ? Day.fromTuple(e) : Days.fromTuple(e))
 
-export const blacklist: Array<Day|Days> = [
+export const blacklist: Array<Day | Days> = [
 	[3, 4, 8],
 	[4, 18, 19],
 	[5, 1],

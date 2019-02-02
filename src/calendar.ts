@@ -1,6 +1,10 @@
-import {whitelist, blacklist} from './lists'
-
 export default class Calendar {
+	constructor(private startDay: Day,
+							private endDay: Day,
+							private whitelist: Array<Day | Days>,
+							private blacklist: Array<Day | Days>) {
+	}
+
 	private static isSameDay(date: Date, day: Day): boolean {
 		return date.getUTCDate() == day.day && date.getUTCMonth() + 1 == day.month
 	}
@@ -12,7 +16,7 @@ export default class Calendar {
 	}
 
 	static isInList(date: Date, list: Array<Day | Days>) {
-		return list.every(value => {
+		return list.some(value => {
 			if (value instanceof Day)
 				return this.isSameDay(date, value)
 			else
@@ -21,16 +25,32 @@ export default class Calendar {
 	}
 
 	static isWeekend(date: Date): boolean {
-		return date.getUTCDay() !== 0 && date.getUTCDay() !== 6
+		return date.getUTCDay() === 0 || date.getUTCDay() === 6
 	}
 
-	static isSchoolDay(day: Date): boolean {
-		return this.isWeekend(day) && !this.isInList(day, whitelist) ? false : !this.isInList(day, blacklist)
+	isSchoolDay(day: Date): boolean {
+		return Calendar.isWeekend(day) ? Calendar.isInList(day, this.whitelist) : !Calendar.isInList(day, this.blacklist)
+	}
+
+	countSchoolDays(): number {
+		let days: number = 0
+		let currentDate = this.startDay.date
+		while (currentDate.getTime() <= this.endDay.date.getTime()) {
+			if (this.isSchoolDay(currentDate))
+				days++
+
+			currentDate = new Date(currentDate.getUTCFullYear(), currentDate.getUTCMonth(), currentDate.getUTCDate() + 1)
+		}
+
+		return days
 	}
 }
 
 export class Day {
-	constructor(public month: number, public day: number) {
+	public date: Date
+
+	constructor(public month: number, public day: number, public year?: number) {
+		this.date = new Date(year || (new Date()).getUTCFullYear(), this.month - 1, this.day)
 	}
 
 	static fromTuple(tuple: number[]): Day {
@@ -39,7 +59,10 @@ export class Day {
 }
 
 export class Days {
+	public amount: number
+
 	constructor(public month: number, public dayStart: number, public dayEnd: number) {
+		this.amount = dayEnd - dayStart
 	}
 
 	static fromTuple(tuple: number[]): Days {
