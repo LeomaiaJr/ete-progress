@@ -1,12 +1,17 @@
 export default class Calendar {
-	constructor(private startDay: Day,
-							private endDay: Day,
+	constructor(public startDay: Day,
+							public endDay: Day,
 							private whitelist: Array<Day | Days>,
 							private blacklist: Array<Day | Days>) {
 	}
 
-	private static isSameDay(date: Date, day: Day): boolean {
-		return date.getUTCDate() == day.day && date.getUTCMonth() + 1 == day.month
+	static isInList(date: Date, list: Array<Day | Days>) {
+		return list.some(value => {
+			if (value instanceof Day)
+				return this.isSameDay(date, value.date)
+			else
+				return this.isBetween(date, value)
+		})
 	}
 
 	private static isBetween(date: Date, days: Days): boolean {
@@ -15,13 +20,10 @@ export default class Calendar {
 		return month === days.month && day >= days.dayStart && day <= days.dayEnd
 	}
 
-	static isInList(date: Date, list: Array<Day | Days>) {
-		return list.some(value => {
-			if (value instanceof Day)
-				return this.isSameDay(date, value)
-			else
-				return this.isBetween(date, value)
-		})
+	private static isSameDay(dateA: Date, dateB: Date): boolean {
+		return dateA.getUTCFullYear() == dateB.getUTCFullYear()
+				&& dateA.getUTCMonth() == dateB.getUTCMonth()
+				&& dateA.getUTCDate() == dateB.getUTCDate()
 	}
 
 	static isWeekend(date: Date): boolean {
@@ -30,6 +32,25 @@ export default class Calendar {
 
 	isSchoolDay(day: Date): boolean {
 		return Calendar.isWeekend(day) ? Calendar.isInList(day, this.whitelist) : !Calendar.isInList(day, this.blacklist)
+	}
+
+	getSchoolDayNumber(day: Date = new Date()): number {
+		if (!this.isSchoolDay(day))
+			throw new Error('Date isn\'t a school day.')
+
+		let dayNumber: number = 0
+		let currentDate = this.startDay.date
+		while (currentDate.getTime() <= this.endDay.date.getTime()) {
+			if (this.isSchoolDay(currentDate))
+				dayNumber++
+
+			if (Calendar.isSameDay(currentDate, day))
+				break
+
+			currentDate = new Date(currentDate.getUTCFullYear(), currentDate.getUTCMonth(), currentDate.getUTCDate() + 1)
+		}
+
+		return dayNumber
 	}
 
 	countSchoolDays(): number {
