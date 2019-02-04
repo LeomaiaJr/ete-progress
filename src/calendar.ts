@@ -1,8 +1,17 @@
+const isSet = (obj: any): boolean => typeof obj !== 'undefined'
+
 export default class Calendar {
 	constructor(public startDay: Day,
 							public endDay: Day,
 							private whitelist: Array<Day | Days>,
 							private blacklist: Array<Day | Days>) {
+	}
+
+	static fromModule(module: any): Calendar {
+		if (!isSet(module.startDay) || !isSet(module.enddDay) || !isSet(module.whitelist) || !isSet(module.blacklist))
+			throw new Error(`Loaded module is invalid`)
+
+		return new Calendar(module.startDay, module.endDay, module.whitelist, module.blacklist)
 	}
 
 	static isInList(date: Date, list: Array<Day | Days>) {
