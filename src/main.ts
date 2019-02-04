@@ -23,7 +23,7 @@ function run() {
 
 	const schoolDaysAmount = calendar.countSchoolDays()
 	const todaySchoolDay = calendar.getSchoolDayNumber()
-	const progressBar = createProgressIndicator(todaySchoolDay / schoolDaysAmount)
+	const progressBar = createProgressIndicator(todaySchoolDay / schoolDaysAmount, {length: 15})
 	const daysRemaining = Math.round(Math.abs((calendar.endDay.date.getTime() - new Date().getTime()) / (24 * 60 * 60 * 1000)))
 
 	const message = `${Math.floor(todaySchoolDay / schoolDaysAmount * 100)}%    ${progressBar}\nFaltam ${daysRemaining} dias (${schoolDaysAmount - todaySchoolDay} letivos	)`
