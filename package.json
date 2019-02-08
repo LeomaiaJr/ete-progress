@@ -30,6 +30,7 @@
   "dependencies": {
     "dotenv": "^6.2.0",
     "express": "^4.16.4",
+    "otpauth": "^3.2.2",
     "twitter": "^1.7.1"
   }
 }

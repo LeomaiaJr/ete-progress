@@ -2,6 +2,7 @@ import express = require('express')
 import Calendar from './calendar'
 import createProgressIndicator from './progress_indicator'
 import client from './client'
+import auth from './auth'
 
 let calendar: Calendar
 
@@ -16,7 +17,7 @@ app.get('/api/percent', (req, res) => {
 	}))
 })
 
-app.get('/api/post', (req, res) => {
+app.get('/api/post', auth, (req, res) => {
 	if (!calendar.isSchoolDay(new Date())) {
 		res.send('There are no classes today, quitting.')
 	}
@@ -29,7 +30,7 @@ app.get('/api/post', (req, res) => {
 	const message = `${Math.floor(todaySchoolDay / schoolDaysAmount * 100)}%    ${progressBar}\nFaltam ${daysRemaining} dias (${schoolDaysAmount - todaySchoolDay} letivos	)`
 
 	res.send(`Posting message: '${message}'`)
-	if (typeof req.query.debug !== 'undefined' && !req.query.debug) {
+	if (typeof req.query.debug === 'undefined' || !req.query.debug) {
 		client.post('statuses/update', {status: message}, (error) => {
 			if (error) throw error
 		})
