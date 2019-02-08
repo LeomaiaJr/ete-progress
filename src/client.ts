@@ -8,3 +8,15 @@ const client = new Twitter({
 })
 
 export default client
+
+export function findLastPercent(): Promise<number> {
+  return client.get('statuses/user_timeline', []).then(tweets => {
+    for (let tweet of <Array<any>>tweets) {
+      const match = /^(\d{1,3})%/.exec(tweet.text)
+      if (match)
+        return parseInt(match[0]) / 100
+    }
+      
+    return -1
+  })
+}

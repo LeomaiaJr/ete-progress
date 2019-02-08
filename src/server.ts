@@ -1,7 +1,7 @@
 import express = require('express')
 import Calendar from './calendar'
 import createProgressIndicator from './progress_indicator'
-import client from './client'
+import client, {findLastPercent} from './client'
 import auth from './auth'
 
 let calendar: Calendar
@@ -26,15 +26,21 @@ app.get('/api/post', auth, (req, res) => {
 	const todaySchoolDay = calendar.getSchoolDayNumber()
 	const progressBar = createProgressIndicator(todaySchoolDay / schoolDaysAmount, {length: 15})
 	const daysRemaining = Math.round(Math.abs((calendar.endDay.date.getTime() - new Date().getTime()) / (24 * 60 * 60 * 1000)))
+    const percent = Math.floor(todaySchoolDay / schoolDaysAmount * 100)
 
-	const message = `${Math.floor(todaySchoolDay / schoolDaysAmount * 100)}%    ${progressBar}\nFaltam ${daysRemaining} dias (${schoolDaysAmount - todaySchoolDay} letivos	)`
+	const message = `${percent}%    ${progressBar}\nFaltam ${daysRemaining} dias (${schoolDaysAmount - todaySchoolDay} letivos)`
 
-	res.send(`Posting message: '${message}'`)
-	if (typeof req.query.debug === 'undefined' || !req.query.debug) {
+    findLastPercent().then(lastPercent => {
+      if (lastPercent === percent / 100)
+        return res.send(`Already posted:\n${message}`)
+
+	  res.send(`Posting message:\n${message}/`)
+	  if (typeof req.query.debug === 'undefined' || !req.query.debug) {
 		client.post('statuses/update', {status: message}, (error) => {
-			if (error) throw error
+          if (error) throw error
 		})
-	}
+	  }
+    })
 })
 
 export function start(data: Calendar, port: number = 80) {
