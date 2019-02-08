@@ -6,7 +6,7 @@ let totp = new otpauth.TOTP({
 })
 
 export default function auth(req: Request, res: Response, next: NextFunction) {
-  if (!totp.validate({token: req.headers.authorization || ''}))
+  if (totp.validate({token: req.headers.authorization || ''}) !== 0)
     return res.status(401).send('Unauthorized')
 
   next()
