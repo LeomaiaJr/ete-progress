@@ -1,20 +1,23 @@
-const isSet = (obj: any): boolean => typeof obj !== 'undefined'
+const isDef = (obj: any): boolean => typeof obj !== 'undefined'
 
 export default class Calendar {
-	constructor(public startDay: Day,
-							public endDay: Day,
-							private whitelist: Array<Day | Days>,
-							private blacklist: Array<Day | Days>) {
-	}
+	private _schoolDays: number
+	
+	constructor(
+		public startDay: Day,
+		public endDay: Day,
+		private whitelist: Array<Day | Days>,
+		private blacklist: Array<Day | Days>
+	) {}
 
 	static fromModule(module: any): Calendar {
-		if (!isSet(module.startDay) || !isSet(module.endDay) || !isSet(module.whitelist) || !isSet(module.blacklist))
+		if (!isDef(module.startDay) || !isDef(module.endDay) || !isDef(module.whitelist) || !isDef(module.blacklist))
 			throw new Error(`Loaded module is invalid`)
 
 		return new Calendar(module.startDay, module.endDay, module.whitelist, module.blacklist)
 	}
 
-	static isInList(date: Date, list: Array<Day | Days>) {
+	private static isInList(date: Date, list: Array<Day | Days>) {
 		return list.some(value => {
 			if (value instanceof Day)
 				return this.isSameDay(date, value.date)
@@ -35,7 +38,7 @@ export default class Calendar {
 				&& dateA.getUTCDate() == dateB.getUTCDate()
 	}
 
-	static isWeekend(date: Date): boolean {
+	private static isWeekend(date: Date): boolean {
 		return date.getUTCDay() === 0 || date.getUTCDay() === 6
 	}
 
@@ -56,28 +59,29 @@ export default class Calendar {
 			if (Calendar.isSameDay(currentDate, day))
 				break
 
-			currentDate = new Date(currentDate.getUTCFullYear(), currentDate.getUTCMonth(), currentDate.getUTCDate() + 1)
+			currentDate = new Date(currentDate.getTime() + 1000 * 60 * 60 * 24)
 		}
 
 		return dayNumber
 	}
 
-	countSchoolDays(): number {
-		let days: number = 0
+	get schoolDays(): number {
+		if (isDef(this._schoolDays))
+			return this._schoolDays
+		
+		this._schoolDays = 0
 		let currentDate = this.startDay.date
 		while (currentDate.getTime() <= this.endDay.date.getTime()) {
 			if (this.isSchoolDay(currentDate))
-				days++
+				this._schoolDays++
 
-			currentDate = new Date(currentDate.getUTCFullYear(), currentDate.getUTCMonth(), currentDate.getUTCDate() + 1)
+			currentDate = new Date(currentDate.getTime() + 1000 * 60 * 60 * 24)
 		}
-
-		return days
 	}
 }
 
 export class Day {
-	public date: Date
+	.date: Date
 
 	constructor(public month: number, public day: number, public year?: number) {
 		this.date = new Date(year || (new Date()).getUTCFullYear(), this.month - 1, this.day)
@@ -89,7 +93,7 @@ export class Day {
 }
 
 export class Days {
-	public amount: number
+	amount: number
 
 	constructor(public month: number, public dayStart: number, public dayEnd: number) {
 		this.amount = dayEnd - dayStart
