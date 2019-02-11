@@ -81,7 +81,7 @@ export default class Calendar {
 }
 
 export class Day {
-	.date: Date
+	date: Date
 
 	constructor(public month: number, public day: number, public year?: number) {
 		this.date = new Date(year || (new Date()).getUTCFullYear(), this.month - 1, this.day)

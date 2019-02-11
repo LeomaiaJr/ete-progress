@@ -13,7 +13,7 @@ app.get('/api/percent', (req, res) => {
 	let date = new Date(parseInt(req.query.millis) || Date.now())
 	console.log(date)
 	res.send(JSON.stringify({
-		percent: calendar.getSchoolDayNumber(date) / calendar.countSchoolDays(),
+		percent: calendar.getSchoolDayNumber(date) / calendar.schoolDays,
 	}))
 })
 
@@ -22,13 +22,12 @@ app.get('/api/post', auth, (req, res) => {
 		res.send('There are no classes today, quitting.')
 	}
 
-	const schoolDaysAmount = calendar.countSchoolDays()
 	const todaySchoolDay = calendar.getSchoolDayNumber()
-	const progressBar = createProgressIndicator(todaySchoolDay / schoolDaysAmount, {length: 15})
+	const progressBar = createProgressIndicator(todaySchoolDay / calendar.schoolDays, {length: 15})
 	const daysRemaining = Math.round(Math.abs((calendar.endDay.date.getTime() - new Date().getTime()) / (24 * 60 * 60 * 1000)))
-    const percent = Math.floor(todaySchoolDay / schoolDaysAmount * 100)
+    const percent = Math.floor(todaySchoolDay / calendar.schoolDays * 100)
 
-	const message = `${percent}%    ${progressBar}\nFaltam ${daysRemaining} dias (${schoolDaysAmount - todaySchoolDay} letivos)`
+	const message = `${percent}%    ${progressBar}\nFaltam ${daysRemaining} dias (${calendar.schoolDays - todaySchoolDay} letivos)`
 
     findLastPercent().then(lastPercent => {
       if (lastPercent === percent / 100)
