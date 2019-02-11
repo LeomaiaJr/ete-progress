@@ -1,8 +1,8 @@
 const otpauth = require('otpauth')
-import {Request, Response, NextFunction} from 'express'
+import {NextFunction, Request, Response} from 'express'
 
-let totp = new otpauth.TOTP({
-  secret: otpauth.Secret.fromB32(process.env.SECRET)
+const totp = new otpauth.TOTP({
+  secret: otpauth.Secret.fromB32(process.env.SECRET),
 })
 
 export default function auth(req: Request, res: Response, next: NextFunction) {
