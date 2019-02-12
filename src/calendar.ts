@@ -26,6 +26,8 @@ export default class Calendar {
 
       currentDate = new Date(currentDate.getTime() + 1000 * 60 * 60 * 24)
     }
+
+    return this._schoolDays
   }
 
   public static fromModule(module: any): Calendar {

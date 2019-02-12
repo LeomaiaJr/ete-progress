@@ -35,7 +35,7 @@ app.get('/api/post', auth, (req, res) => {
     if (lastPercent === percent / 100)
       return res.send(`Already posted:\n${message}`)
 
-    res.send(`Posting message:\n${message}/`)
+    res.send(`Posting message:\n${message}`)
     if (typeof req.query.debug === 'undefined' || !req.query.debug) {
       client.post('statuses/update', {status: message}, (error) => {
         if (error) throw error
