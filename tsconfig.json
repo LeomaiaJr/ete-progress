@@ -5,8 +5,11 @@
     "target": "es6",
     "noImplicitAny": true,
     "moduleResolution": "node",
-    "outDir": "out",
-    "sourceMap": true
+    "outDir": "server",
+    "sourceMap": true,
+    "lib": [
+      "es2016"
+    ]
   },
   "include": [
     "src"

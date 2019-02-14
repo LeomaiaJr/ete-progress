@@ -7,7 +7,7 @@ import createProgressIndicator from './progress_indicator'
 let calendar: Calendar
 
 const app = express()
-app.use(express.static('../public'))
+app.use(express.static('./web'))
 
 app.get('/api/percent', (req, res) => {
   const date = new Date(parseInt(req.query.millis) || Date.now())
