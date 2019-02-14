@@ -9,6 +9,13 @@ module.exports = {
 		filename: 'bundle.js',
 		publicPath: '/'
 	},
+	resolve: {
+		modules: [
+			path.join(__dirname, 'src/web'),
+			'node_modules',
+		],
+		extensions: ['.ts', '.js', '.json']
+	},
 	plugins: [
 		new HtmlWebpackPlugin({
 			template: './src/web/index.pug'
