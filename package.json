@@ -8,7 +8,7 @@
     "build-ts": "tsc",
     "build-web": "webpack --mode production",
     "watch-web": "webpack --mode development --watch",
-    "postinstall": "npm run build-ts && npm run build-web"
+    "postinstall": "yarn run build-ts && yarn run build-web"
   },
   "repository": {
     "type": "git",
