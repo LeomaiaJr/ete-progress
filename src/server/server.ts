@@ -16,6 +16,10 @@ app.get('/api/percent', (req, res) => {
   }))
 })
 
+app.get('/api/auth', auth, (req, res) => {
+  res.status(200).send('Authorized')
+})
+
 app.get('/api/post', auth, (req, res) => {
   if (!calendar.isSchoolDay(new Date())) {
     res.send('There are no classes today, quitting.')
