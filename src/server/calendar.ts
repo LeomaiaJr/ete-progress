@@ -69,8 +69,8 @@ export default class Calendar {
   }
 
   public getSchoolDayNumber(day: Date = new Date()): number {
-    if (!this.isSchoolDay(day)) {
-      throw new Error('Date isn\'t a school day.')
+    while (!this.isSchoolDay(day)) {
+      day = new Date(day.getUTCFullYear(), day.getUTCMonth(), day.getUTCDate() - 1)
     }
 
     let dayNumber: number = 0
