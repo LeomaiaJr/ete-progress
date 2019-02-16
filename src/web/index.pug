@@ -2,11 +2,44 @@ doctype html
 head
   title ETE Progress
   meta(name='viewport' content='width=device-width, initial-scale=1')
-  link(rel='stylesheet' href='style.css')
+  link(rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.2/css/all.css'
+  integrity='sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr' crossorigin='anonymous')
 
 body
-  section.hero.is-fullheight
+  .modal#login-modal
+    .modal-background(data-disable='is-active #login-modal')
+    .modal-card
+      form#login-modal--form(action='#')
+        header.modal-card-head
+          p.modal-card-title Authentication
+        section.modal-card-body.is-centered
+          .field
+            .control
+              input.input(type='password' placeholder='Password')#login-modal--field
+            span.help.is-danger.is-invisible#login-modal--info Authentication failed
+
+        footer.modal-card-foot
+          button.button.is-link#login-modal--button(type='submit') Continue
+          button.button(data-disable='is-active #login-modal') Cancel
+
+
+  section.hero.is-fullheight.is-dark
+    .hero-head
+      nav.navbar.is-transparent
+        .navbar-menu.is-active
+          .navbar-end
+            .navbar-item
+              a.button.is-link.is-inverted.is-outlined.tooltip.is-tooltip-left.is-tooltip-info(
+              data-enable='is-active #login-modal'
+              data-tooltip='Authentication')
+                span.fas.fa-lock
+
     .hero-body
       .container.has-text-centered
         h1.title ETE Progress
-        h2.subtitle(data-watch) The school year is currently at ${percent}%
+        br
+        br
+        .columns
+          .column.is-6.is-offset-3
+            .div.tooltip.is-tooltip-success(data-bind-humanPercent='data-tooltip')
+              progress.progress.is-large.is-success(data-bind-percent='value' max=100)

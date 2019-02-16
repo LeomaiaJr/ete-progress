@@ -1,8 +1,29 @@
 @charset "utf-8"
-@import "~bulma/bulma"
+
+$navbar-breakpoint: 0
+
+@import '~bulma/bulma'
+@import '~bulma-tooltip'
+
+::-webkit-scrollbar
+  display: none
 
 .hero
   +touch
     min-height: calc(100vh - 56px) !important
 
-  background-color: white
+.navbar-item
+  &.test
+    position: absolute
+    left: 50%
+    height: 100%
+    display: flex
+    align-items: center
+
+  &.has-dropdown
+    .navbar-dropdown
+      display: none
+
+  &.is-active
+    .navbar-dropdown
+      display: block

@@ -25,6 +25,7 @@
   "homepage": "https://github.com/rodrigoaddor/ete-progress#readme",
   "devDependencies": {
     "@types/express": "^4.16.1",
+    "@types/js-cookie": "^2.2.1",
     "@types/node": "^10.12.21",
     "@types/twitter": "^1.7.0",
     "bulma": "^0.7.4",
@@ -43,8 +44,10 @@
     "webpack-cli": "^3.2.3"
   },
   "dependencies": {
+    "bulma-tooltip": "^2.0.2",
     "dotenv": "^6.2.0",
     "express": "^4.16.4",
+    "js-cookie": "^2.2.0",
     "otpauth": "^3.2.2",
     "twitter": "^1.7.1"
   }
