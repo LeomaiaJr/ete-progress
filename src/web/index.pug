@@ -43,3 +43,23 @@ body
           .column.is-6.is-offset-3
             .div.tooltip.is-tooltip-success(data-bind-humanPercent='data-tooltip')
               progress.progress.is-large.is-success(data-bind-percent='value' max=100)
+        br
+        br
+        span#response
+        br
+        br
+        button.button.is-outlined.is-success#clear-response-btn Ok
+
+    .hero-foot
+      nav.tabs.is-boxed.is-fullwidth
+        .container
+          ul
+            - var n = 0
+            while n < 3
+              li
+              - n++
+            li.is-active.is-invisible(data-bind-authenticated='!.is-invisible')
+              a(href='#post') Post
+            while n < 6
+              li
+              - n++

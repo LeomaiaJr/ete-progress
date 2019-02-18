@@ -6,6 +6,7 @@ export function doWatchers() {
     element.removeAttribute('data-watch')
   }
 }
+
 const proxy = new Proxy({}, {
   set: (obj: any, key: string, value: any) => {
     if (key.startsWith('__'))
@@ -20,7 +21,15 @@ const proxy = new Proxy({}, {
 
     for (const element of Array.from(document.querySelectorAll(`[data-bind-${key}]`))) {
       for (const attribute of element.getAttribute(`data-bind-${key}`).split(', ')) {
-        element.setAttribute(attribute, value)
+        if (/^!?\./.exec(attribute)) {
+          if (Boolean(value) !== (attribute.substr(0, 1) === '!')) {
+            element.classList.add(attribute.replace(/^!?\./, ''))
+          } else {
+            element.classList.remove(attribute.replace(/^!?\./, ''))
+          }
+        } else {
+          element.setAttribute(attribute, value)
+        }
       }
     }
 

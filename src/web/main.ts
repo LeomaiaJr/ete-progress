@@ -20,10 +20,29 @@ function refreshAuth() {
   })
 }
 
+window.addEventListener('hashchange', () => {
+  if (location.hash === '#post') {
+    location.hash = ''
+    fetch('/api/post?debug=true', {
+      headers: {Authorization: totp.generate()},
+    }).then(response => {
+      response.text().then(text => {
+        document.querySelector('#response').innerHTML = text.replace(/\n/g, '<br/>')
+      })
+    })
+  }
+})
+
 function setup() {
   doWatchers()
   initialize()
   refreshAuth()
+
+  template.authenticated = typeof Cookies.get('secret') !== 'undefined'
+
+  document.querySelector('#clear-response-btn').addEventListener('click', () => {
+    document.querySelector('#response').innerHTML = ''
+  })
 
   document.querySelector('#login-modal--form').addEventListener('submit', e => {
     e.preventDefault()
@@ -45,7 +64,10 @@ function setup() {
 
       if (response.status === 200) {
         document.querySelector('#login-modal').classList.remove('is-active')
+        template.authenticated = true
       } else {
+        template.authenticated = false
+        Cookies.remove('secret')
         button.classList.add('is-danger')
         info.classList.remove('is-invisible')
 
@@ -74,8 +96,10 @@ fetch('/api/percent').then(
 
 declare global {
   interface Window {
-    Template: any
+    Template: any,
+    Cookies: any
   }
 }
 
 window.Template = template
+window.Cookies = Cookies
