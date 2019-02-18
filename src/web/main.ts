@@ -23,7 +23,7 @@ function refreshAuth() {
 window.addEventListener('hashchange', () => {
   if (location.hash === '#post') {
     location.hash = ''
-    fetch('/api/post?debug=true', {
+    fetch('/api/post', {
       headers: {Authorization: totp.generate()},
     }).then(response => {
       response.text().then(text => {
