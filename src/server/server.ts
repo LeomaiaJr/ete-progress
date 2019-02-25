@@ -16,6 +16,14 @@ app.get('/api/percent', (req, res) => {
   }))
 })
 
+app.get('/api/schoolDay', (req, res) => {
+  res.status(200).send(JSON.stringify(
+    calendar.isSchoolDay(
+      new Date(parseInt(req.query.millis) || Date.now()),
+    ),
+  ))
+})
+
 app.get('/api/auth', auth, (req, res) => {
   res.status(200).send('Authorized')
 })
